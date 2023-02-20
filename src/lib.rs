@@ -6,6 +6,7 @@ fn process_image(
     image_buffer: &[u8],
     max_dimension: u32,
     format: ImageOutputFormat,
+    filter_type: FilterType,
 ) -> Result<Vec<u8>, String> {
     let image = ImageReader::new(std::io::Cursor::new(image_buffer))
         .with_guessed_format()
@@ -23,7 +24,7 @@ fn process_image(
         ((max_dimension as f32 * aspect_ratio) as u32, max_dimension)
     };
 
-    let resized_image = image.resize(new_width, new_height, FilterType::Nearest);
+    let resized_image = image.resize(new_width, new_height, filter_type);
 
     let mut compressed_buffer = std::io::Cursor::new(Vec::new());
 
@@ -35,13 +36,15 @@ fn process_image(
 }
 
 fn convert(mut cx: FunctionContext) -> JsResult<JsBuffer> {
-    let max_dimension_arg = cx.argument::<JsNumber>(1)?;
+    let convert_config = cx.argument::<JsObject>(0)?;
+    let max_dimension_arg: Handle<JsNumber> = convert_config.get(&mut cx, "max_dimensions")?;
     let max_dimension = max_dimension_arg.value(&mut cx) as u32;
 
-    let format_arg = cx.argument_opt(2);
+    let format_arg: Result<Option<Handle<JsString>>, neon::result::Throw> =
+        convert_config.get_opt(&mut cx, "format");
     let format_string = match format_arg {
-        Some(_) => cx.argument::<JsString>(2)?.value(&mut cx),
-        None => "webp".to_string(),
+        Ok(Some(format_arg)) => format_arg.value(&mut cx),
+        _ => "webp".to_string(),
     };
     let format = match format_string.as_str() {
         "avif" => ImageOutputFormat::Avif,
@@ -55,9 +58,25 @@ fn convert(mut cx: FunctionContext) -> JsResult<JsBuffer> {
         _ => ImageOutputFormat::WebP,
     };
 
-    let buf_arg = cx.argument::<JsBuffer>(0)?;
+    let filter_type_arg: Result<Option<Handle<JsString>>, neon::result::Throw> =
+        convert_config.get_opt(&mut cx, "filter");
+    let filter_type_string = match filter_type_arg {
+        Ok(Some(filter_type_arg)) => filter_type_arg.value(&mut cx),
+        _ => "nearest".to_string(),
+    };
+
+    let filter_type = match filter_type_string.as_str() {
+        "triangle" => FilterType::Triangle,
+        "catmullrom" => FilterType::CatmullRom,
+        "gaussian" => FilterType::Gaussian,
+        "lanczos3" => FilterType::Lanczos3,
+        "nearest" => FilterType::Nearest,
+        _ => FilterType::Nearest,
+    };
+
+    let buf_arg: Handle<JsBuffer> = convert_config.get(&mut cx, "buffer")?;
     let buf = buf_arg.as_slice(&cx);
-    match process_image(buf, max_dimension, format) {
+    match process_image(buf, max_dimension, format, filter_type) {
         Ok(compressed_buffer) => {
             let mut buffer = cx.buffer(compressed_buffer.len())?;
             buffer

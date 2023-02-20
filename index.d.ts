@@ -1,4 +1,27 @@
 /// <reference types="node" />
+/**
+ * The configuration object for the convert function.
+ */
+type ConvertConfig = {
+  /**
+   * The image buffer to compress.
+   */
+  buffer: Buffer;
+  /**
+   * The maximum width or height of the converted image.
+   */
+  max_dimensions: number;
+  /**
+   * The format of the converted image. Defaults to webp.
+   * @default "webp"
+   */
+  format?: Format;
+  /**
+   * The filter to use when resizing the image. Defaults to nearest.
+   * @default "nearest"
+   */
+  filter?: FilterType;
+}
 
 type Format =
   | "webp"
@@ -10,17 +33,18 @@ type Format =
   | "bmp"
   | "tga";
 
+type FilterType =
+  | "nearest"
+  | "lanczos"
+  | "gaussian"
+  | "triangle"
+  | "catmullrom"
+
 declare module "@alexislours/optimage" {
   /**
-   * Compresses an image buffer to a WebP, JPG, PNG or Avif buffer.
-   * @param image_buffer The image buffer to compress.
-   * @param max_dimensions The maximum width or height of the image.
-   * @param [format=webp] The format of the image. Defaults to 'webp'.
+   * Converts an image buffer to a resized and compressed image buffer.
+   * @param convertConfig The configuration object.
    * @returns The compressed image buffer.
    */
-  export function convert(
-    image_buffer: Buffer,
-    max_dimensions: number,
-    format?: Format
-  ): Buffer;
+  export function convert(convertConfig: ConvertConfig): Buffer;
 }
