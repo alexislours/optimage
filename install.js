@@ -14,7 +14,7 @@ const fetchBinary = async () => {
   await fetch(url)
     .then((res) => {
       if (res.status === 404) {
-        console.log(`Not prebuilt binary for: ${platform}-${arch}
+        console.log(`No prebuilt binary for: ${platform}-${arch}
 Attempting to build from source... 
 If this step fails, you probably need to install the Rust toolchain: https://www.rust-lang.org/tools/install
 This step can take a minute or two...`);
