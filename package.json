@@ -1,6 +1,6 @@
 {
   "name": "@alexislours/optimage",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Converts and optimize image buffers",
   "main": "index.node",
   "scripts": {

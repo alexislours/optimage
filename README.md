@@ -1,3 +1,4 @@
+![NPM](https://img.shields.io/npm/l/@alexislours/optimage) ![npm (scoped)](https://img.shields.io/npm/v/@alexislours/optimage)
 # @alexislours/optimage
 
 **@alexislours/optimage:** A native module to convert and optimize image buffers.

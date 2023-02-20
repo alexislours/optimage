@@ -10,7 +10,7 @@ const url = `https://github.com/alexislours/optimage/releases/download/v${versio
 console.log(`Installing for ${platform}-${arch} (v${version})`);
 
 const fetchBinary = async () => {
-  console.log("Attempting to fetch prebuilt package fro GitHub...");
+  console.log("Attempting to fetch prebuilt package from GitHub...");
   await fetch(url)
     .then((res) => {
       if (res.status === 404) {
@@ -20,8 +20,10 @@ If this step fails, you probably need to install the Rust toolchain: https://www
 This step can take a minute or two...`);
         exec('npm run build-release');
       } else {
-        res = res.arrayBuffer();
-        fs.writeFileSync('index.node', Buffer.from(res));
+        res.arrayBuffer().then((res) => {
+          fs.writeFileSync('index.node', Buffer.from(res));
+          console.log("Prebuilt binary fetched successfully!");
+        });
       }
     })
 };

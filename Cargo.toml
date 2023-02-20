@@ -1,6 +1,6 @@
 [package]
 name = "optimage"
-version = "0.1.0"
+version = "0.1.1"
 description = "Converts image buffers to WebP images"
 license = "MIT"
 edition = "2021"
