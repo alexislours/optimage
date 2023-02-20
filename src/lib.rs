@@ -48,6 +48,10 @@ fn convert(mut cx: FunctionContext) -> JsResult<JsBuffer> {
         "webp" => ImageOutputFormat::WebP,
         "png" => ImageOutputFormat::Png,
         "jpg" => ImageOutputFormat::Jpeg(75),
+        "tiff" => ImageOutputFormat::Tiff,
+        "bmp" => ImageOutputFormat::Bmp,
+        "gif" => ImageOutputFormat::Gif,
+        "tga" => ImageOutputFormat::Tga,
         _ => ImageOutputFormat::WebP,
     };
 

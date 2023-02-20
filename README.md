@@ -1,4 +1,5 @@
 ![NPM](https://img.shields.io/npm/l/@alexislours/optimage) ![npm (scoped)](https://img.shields.io/npm/v/@alexislours/optimage)
+
 # @alexislours/optimage
 
 **@alexislours/optimage:** A native module to convert and optimize image buffers.
@@ -33,6 +34,16 @@ const convertedBuffer = convert(imageBuffer, 1000, "webp");
 ```
 
 ```ts
+type Format =
+  | "webp"
+  | "avif"
+  | "jpg"
+  | "png"
+  | "tiff"
+  | "gif"
+  | "bmp"
+  | "tga";
+
 /**
  * Compresses an image buffer to a WebP, JPG, PNG or Avif buffer.
  * @param image_buffer The image buffer to compress.
@@ -43,6 +54,6 @@ const convertedBuffer = convert(imageBuffer, 1000, "webp");
 export function convert(
   image_buffer: Buffer,
   max_dimensions: number,
-  format?: "webp" | "avif" | "jpg" | "png"
+  format?: Format
 ): Buffer;
 ```
