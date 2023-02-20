@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-declare module 'optimage' {
+declare module '@alexislours/optimage' {
     /**
      * Compresses an image buffer to a WebP, JPG, PNG or Avif buffer.
      * @param image_buffer The image buffer to compress.
