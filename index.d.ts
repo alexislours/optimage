@@ -35,7 +35,7 @@ type Format =
 
 type FilterType =
   | "nearest"
-  | "lanczos"
+  | "lanczos3"
   | "gaussian"
   | "triangle"
   | "catmullrom"
