@@ -18,9 +18,11 @@ optimage exposes a single function, `convert`, which takes an image buffer and r
 ```js
 // CommonJS
 const { convert } = require("@alexislours/optimage");
+const fs = require("node:fs");
 
 // ES Modules
 import { convert } from "@alexislours/optimage";
+import fs from "node:fs";
 
 const imageBuffer = fs.readFileSync("image.png");
 
